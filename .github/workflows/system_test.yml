@@ -39,6 +39,24 @@ jobs:
 
       - name: Run Tests
         run: RAILS_ENV=test bundle exec rails test:system
+                
+  ping_rails_new_io:
+    name: Ping ping railsnew.io after CI finished
+    needs: test
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - run: echo "REPO_NAME=$(echo "$GITHUB_REPOSITORY" | awk -F / '{print $2}')" >> $GITHUB_ENV
+        shell: bash
+
+      - run: echo "$REPOSITORY_NAME"
+        shell: bash    
         
-      - name: Ping railsnew.io with status = SUCCESS
-        run: echo "Pinging https://railsnew.io?repo_name=xxx&&finish_time=YYY&&"
+      - uses: technote-space/workflow-conclusion-action@v2
+      
+      - name: ping Railsnew.io
+        uses: fjogeleit/http-request-action@master
+        with:
+          url: "http://ecb72f5b9f65.ngrok.io/admin/verification_runs/${{env.REPO_NAME}}?github_status=${{ env.WORKFLOW_CONCLUSION }}"
+          method: 'PUT'
+          bearerToken: ${{ secrets.RAILS_NEW_IO_TOKEN }}        
