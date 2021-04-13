@@ -57,6 +57,6 @@ jobs:
       - name: ping Railsnew.io
         uses: fjogeleit/http-request-action@master
         with:
-          url: "http://ecb72f5b9f65.ngrok.io/admin/verification_runs/${{env.REPO_NAME}}?github_status=${{ env.WORKFLOW_CONCLUSION }}"
+          url: "https://b02e015d45cf.ngrok.io/admin/verification_runs/${{env.REPO_NAME}}?github_status=${{ env.WORKFLOW_CONCLUSION }}"
           method: 'PUT'
           bearerToken: ${{ secrets.RAILS_NEW_IO_TOKEN }}        
